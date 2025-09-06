@@ -1,12 +1,17 @@
 const express = require("express");
 const connectDB = require("./src/config/db");
+const router = require("./src/Router/authRoute"); // <-- fixed
 require("dotenv").config();
 
 const app = express();
+app.use(express.json());
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.send("Server Running....");
 });
+
+// Mount auth router under /auth
+app.use("/auth", router);
 
 const port = process.env.PORT || 3001;
 
