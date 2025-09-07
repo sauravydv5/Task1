@@ -1,29 +1,52 @@
 const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser"); // 👈 जोड़ा
 const connectDB = require("./src/config/db");
-const router = require("./src/Router/authRoute"); // <-- fixed
+const authRouter = require("./src/Router/authRoute");
+const itemRouter = require("./src/Router/itemRoutes");
 require("dotenv").config();
 
 const app = express();
-app.use(express.json());
 
+// Allow requests from React frontend
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+app.use(cookieParser()); // 👈 जोड़ा
+
+// Root route
 app.get("/", (req, res) => {
-  res.send("Server Running....");
+  res.send("Server Running...");
 });
 
-// Mount auth router under /auth
-app.use("/auth", router);
+// Mount routers
+app.use("/auth", authRouter);
+app.use("/items", itemRouter);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    error: err.message || "Internal Server Error",
+  });
+});
 
 const port = process.env.PORT || 3001;
 
-// connect DB and start server
+// Connect DB and start server
 connectDB()
   .then(() => {
     console.log("Database Connected successfully...");
     app.listen(port, () => {
-      console.log(`Server is running Successfully on PORT ${port}`);
+      console.log(`Server is running on PORT ${port}`);
     });
   })
   .catch((err) => {
-    console.error("Database cannot be connected..", err);
+    console.error("Database cannot be connected:", err);
     process.exit(1);
   });
