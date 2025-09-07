@@ -1,6 +1,6 @@
 // src/controllers/cart-controller.js
 const { validationResult } = require("express-validator");
-const User = require("../models/User");
+const User = require("../Models/User");
 const Item = require("../models/itemModel");
 
 // Get Cart
