@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser"); // 👈 जोड़ा
 const connectDB = require("./src/config/db");
 const authRouter = require("./src/Router/authRoute");
 const itemRouter = require("./src/Router/itemRoutes");
+const cartRouter = require("./src/Router/cartRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -27,6 +28,7 @@ app.get("/", (req, res) => {
 // Mount routers
 app.use("/auth", authRouter);
 app.use("/items", itemRouter);
+app.use("/cart", cartRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

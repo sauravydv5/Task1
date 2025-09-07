@@ -1,36 +1,41 @@
-# README.md
+# E-commerce Backend (Node.js + Express + MongoDB + JWT)
 
-- `CORS_ORIGIN` – comma-separated allowed origins (e.g., `http://localhost:5173`)
+## Features
 
-3. **Seed (optional)**
+- JWT authentication (signup/login)
+- Items CRUD with filters (category, price range, text search), sort, pagination
+- Cart APIs (server-side cart stored in User document) — persists after logout
+- Validation, security headers (Helmet), CORS, logging
 
-```bash
-npm run seed
-```
+## Quick start
 
-4. **Run**
+1. Clone repo
+2. Copy `.env.example` to `.env` and update variables (MONGODB_URI, JWT_SECRET)
+3. Install:
+   npm install
+4. Seed sample data (optional):
+   npm run seed
+5. Run:
+   npm run dev
 
-```bash
-npm run dev
-# or
-npm start
-```
+Server default: http://localhost:4001
 
-Server will start on `http://localhost:4001` by default.
+## API endpoints (summary)
 
-## API Reference
+- `POST /auth/signup` — { name, email, password }
+- `POST /auth/login` — { email, password } -> returns token
+- `GET /items` — list with query params: search, category, minPrice, maxPrice, sort, page, limit
+- `GET /items/:id` — single item
+- `POST /items` — create
+- `PATCH /items/:id` — update
+- `DELETE /items/:id` — delete
+- `GET /cart` — get cart for current user
+- `POST /cart/add` — { itemId, qty? }
+- `PATCH /cart/update` — { itemId, qty }
+- `DELETE /cart/remove/:itemId`
+- `DELETE /cart/clear`
 
-### Auth
+## Notes
 
-- `POST /auth/signup` `{ name, email, password }`
-- `POST /auth/login` `{ email, password }`
-
-- `GET /auth/me` — use to verify token (requires `Authorization: Bearer <token>`) but returns `{ ok: true }` (can be extended)
-
-### Items (protected; admin for write operations)
-
-- `GET /items?search=&category=electronics,fashion&minPrice=1000&maxPrice=5000&sort=price,-createdAt&page=1&limit=12`
-- `GET /items/:id`
-- `POST /items` _(admin)_ — create item
-- `PATCH /items/:id` _(admin)_ — update item
-- `DELETE /items/:id` _(admin)_ — delete item
+- JWT token must be sent in `Authorization: Bearer <token>` header.
+- Cart is saved in the `User` document and therefore persists across logins/logouts.
