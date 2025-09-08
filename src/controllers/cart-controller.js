@@ -1,7 +1,7 @@
 // src/controllers/cart-controller.js
 const { validationResult } = require("express-validator");
-const User = require("../models/User");
-const Item = require("../models/itemModel");
+const User = require("../model/User");
+const Item = require("../model/itemModel");
 
 // Get Cart
 const getCart = async (req, res) => {
